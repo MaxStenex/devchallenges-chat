@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
+import { Input } from "components/ui";
 
 export type Channel = {
   id: number;
@@ -49,10 +50,7 @@ export const ChannelsContent: React.FC<Props> = ({ onChannelClick }) => {
         </button>
       </div>
       <div className="mb-8">
-        <input
-          type="text"
-          className="py-4 px-3 bg-gray-600 text-sm font-medium w-full
-          rounded text-white"
+        <Input
           placeholder="Search"
           onChange={(e) => onChannelsSearch(e.target.value.trim().toLowerCase())}
         />
