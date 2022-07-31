@@ -5,3 +5,14 @@
 input:focus {
   outline: none;
 }
+
+@layer components {
+  .input-primary {
+    @apply py-4 px-3 bg-gray-600 text-sm font-medium w-full rounded text-white;
+  }
+
+  .btn-primary {
+    @apply px-4 py-2 rounded font-medium bg-black border-gray-400 border-2 hover:bg-gray-600 transition-all
+    text-base;
+  }
+}
