@@ -1,46 +1,14 @@
-import { FormWrapper } from "components/auth-pages";
-import { TextField } from "components/ui";
+import { FormWrapper, RegisterForm } from "components/auth-pages";
 import React, { ReactElement } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-
-type FormInputs = {
-  email: string;
-  username: string;
-  password: string;
-  confirmPassword: string;
-};
 
 const RegisterPage = () => {
-  const { register, handleSubmit } = useForm<FormInputs>();
-
-  const onSubmit: SubmitHandler<FormInputs> = async ({
-    email,
-    username,
-    password,
-    confirmPassword,
-  }) => {
-    try {
-      console.log(email, username, password, confirmPassword);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <FormWrapper
       title="Create an account"
       linkHref="/login"
       linkText="Already have an account?"
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-4">
-          <TextField {...register("email")} label="Email" />
-          <TextField {...register("username")} label="Username" />
-          <TextField {...register("password")} label="Password" />
-          <TextField {...register("confirmPassword")} label="Confirm password" />
-        </div>
-        <button className="btn-primary mt-8 block w-full">Confirm</button>
-      </form>
+      <RegisterForm />
     </FormWrapper>
   );
 };
