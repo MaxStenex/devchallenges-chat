@@ -34,13 +34,10 @@ const RegisterPage = () => {
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-4">
-          <TextField register={{ ...register("email") }} label="Email" />
-          <TextField register={{ ...register("username") }} label="Username" />
-          <TextField register={{ ...register("password") }} label="Password" />
-          <TextField
-            register={{ ...register("confirmPassword") }}
-            label="Confirm password"
-          />
+          <TextField {...register("email")} label="Email" />
+          <TextField {...register("username")} label="Username" />
+          <TextField {...register("password")} label="Password" />
+          <TextField {...register("confirmPassword")} label="Confirm password" />
         </div>
         <button className="btn-primary mt-8 block w-full">Confirm</button>
       </form>

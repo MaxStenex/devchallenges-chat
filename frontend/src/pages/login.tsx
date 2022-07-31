@@ -23,8 +23,8 @@ const LoginPage = () => {
     <FormWrapper title="Welcome back!" linkHref="/register" linkText="Need an account?">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-4">
-          <TextField register={{ ...register("email") }} label="Email" />
-          <TextField register={{ ...register("password") }} label="Password" />
+          <TextField {...register("email")} label="Email" />
+          <TextField {...register("password")} label="Password" />
         </div>
         <button className="btn-primary mt-8 block w-full">Login</button>
       </form>
