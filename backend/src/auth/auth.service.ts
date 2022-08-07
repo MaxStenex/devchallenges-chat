@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
 import { User } from "@prisma/client";
 import * as bcrypt from "bcrypt";
 import { PrismaService } from "src/prisma/prisma.service";
@@ -6,7 +7,7 @@ import { LoginDto, RegisterDto } from "./auth.dto";
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private jwtService: JwtService) {}
 
   async register(data: RegisterDto): Promise<User> {
     try {
@@ -25,7 +26,10 @@ export class AuthService {
     }
   }
 
-  async login({ email, password }: LoginDto): Promise<User> {
+  async login({
+    email,
+    password,
+  }: LoginDto): Promise<User & { accessToken: string }> {
     try {
       const [user]: User[] = await this.prisma
         .$queryRaw`SELECT * FROM "public"."User" WHERE email = ${email}`;
@@ -38,7 +42,9 @@ export class AuthService {
 
       delete user.password;
 
-      return user;
+      const tokenPayload = { sub: user.id };
+
+      return { ...user, accessToken: this.jwtService.sign(tokenPayload) };
     } catch (error) {
       throw new HttpException(
         error.message || "Something went wrong",
