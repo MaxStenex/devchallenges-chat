@@ -4,6 +4,7 @@ import { TextField } from "components/ui";
 import { useRouter } from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useUser } from "state/user";
+import { prepareUserData } from "utils/prepareUserData";
 import { z } from "zod";
 
 const validationSchema = z.object({
@@ -39,11 +40,7 @@ export const LoginForm = () => {
 
       if (!data) return;
 
-      setUser({
-        id: data.id,
-        email: data.email,
-        username: data.username,
-      });
+      setUser(prepareUserData(data));
       router.push("/");
     } catch (error) {
       console.log(error);

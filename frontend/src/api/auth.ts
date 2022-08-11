@@ -8,6 +8,6 @@ export const login = ({ email, password }: LoginFormInputs) => {
   });
 };
 
-export const me = () => {
+export const authMe = () => {
   return api.get("auth/me");
 };

@@ -17,11 +17,7 @@ type ExtendedAppProps = AppProps & {
 function MyApp({ Component, pageProps }: ExtendedAppProps) {
   const getLayout = Component.getLayout ?? ((page) => <MainLayout>{page}</MainLayout>);
 
-  return getLayout(
-    <UserProvider>
-      <Component {...pageProps} />
-    </UserProvider>
-  );
+  return <UserProvider>{getLayout(<Component {...pageProps} />)}</UserProvider>;
 }
 
 export default MyApp;
