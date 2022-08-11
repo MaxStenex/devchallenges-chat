@@ -4,6 +4,7 @@ import type { NextPage } from "next";
 import "../styles/global.css";
 import type { ReactElement, ReactNode } from "react";
 import React from "react";
+import { UserProvider } from "state/user";
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -16,7 +17,11 @@ type ExtendedAppProps = AppProps & {
 function MyApp({ Component, pageProps }: ExtendedAppProps) {
   const getLayout = Component.getLayout ?? ((page) => <MainLayout>{page}</MainLayout>);
 
-  return getLayout(<Component {...pageProps} />);
+  return getLayout(
+    <UserProvider>
+      <Component {...pageProps} />
+    </UserProvider>
+  );
 }
 
 export default MyApp;

@@ -1,8 +1,10 @@
-import React from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { login } from "api/auth";
 import { TextField } from "components/ui";
+import { useRouter } from "next/router";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useUser } from "state/user";
+import { z } from "zod";
 
 const validationSchema = z.object({
   email: z
@@ -16,20 +18,33 @@ const validationSchema = z.object({
     .max(255, "Max password length is 255."),
 });
 
-type FormInputs = z.infer<typeof validationSchema>;
+export type LoginFormInputs = z.infer<typeof validationSchema>;
 
 export const LoginForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormInputs>({
+  } = useForm<LoginFormInputs>({
     resolver: zodResolver(validationSchema),
   });
 
-  const onSubmit: SubmitHandler<FormInputs> = async ({ email, password }) => {
+  const { setUser } = useUser();
+
+  const router = useRouter();
+
+  const onSubmit: SubmitHandler<LoginFormInputs> = async ({ email, password }) => {
     try {
-      console.log(email, password);
+      const { data } = await login({ email, password });
+
+      if (!data) return;
+
+      setUser({
+        id: data.id,
+        email: data.email,
+        username: data.username,
+      });
+      router.push("/");
     } catch (error) {
       console.log(error);
     }
