@@ -11,12 +11,16 @@ export const TextField = React.forwardRef<HTMLInputElement, Props>(
       <label className="flex flex-col">
         <span className="font-medium mb-2 text-sm">{label}</span>
         <input
-          type={"text" || props.type}
-          className={`input-primary ${props.className || ""}`}
           {...props}
+          type={"text" || props.type}
+          className={`input-primary ${props.className || ""}`.trim()}
           ref={ref}
         />
-        {error && <span className="mt-1 text-sm">{error}</span>}
+        {error && (
+          <span data-testid="textfield-error" className="mt-1 text-sm">
+            {error}
+          </span>
+        )}
       </label>
     );
   }
