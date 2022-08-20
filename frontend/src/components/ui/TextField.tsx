@@ -12,7 +12,7 @@ export const TextField = React.forwardRef<HTMLInputElement, Props>(
         <span className="font-medium mb-2 text-sm">{label}</span>
         <input
           {...props}
-          type={"text" || props.type}
+          type={props.type || "text"}
           className={`input-primary ${props.className || ""}`.trim()}
           ref={ref}
         />
