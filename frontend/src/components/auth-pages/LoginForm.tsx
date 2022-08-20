@@ -26,6 +26,7 @@ export const LoginForm = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<LoginFormInputs>({
     resolver: zodResolver(validationSchema),
   });
@@ -43,7 +44,18 @@ export const LoginForm = () => {
       setUser(prepareUserData(data));
       router.push("/");
     } catch (error) {
-      console.log(error);
+      if ((error as any)?.response?.status === 401) {
+        const message = "Invalid email or password";
+
+        console.log(error);
+
+        setError("email", {
+          message,
+        });
+        setError("password", {
+          message,
+        });
+      }
     }
   };
 
