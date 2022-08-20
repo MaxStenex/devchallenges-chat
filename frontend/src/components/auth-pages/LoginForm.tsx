@@ -50,11 +50,18 @@ export const LoginForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="space-y-4">
-        <TextField {...register("email")} label="Email" error={errors.email?.message} />
+        <TextField
+          {...register("email")}
+          label="Email"
+          error={errors.email?.message}
+          data-testid="test-email"
+        />
         <TextField
           {...register("password")}
           label="Password"
           error={errors.password?.message}
+          type="password"
+          data-testid="test-password"
         />
       </div>
       <button className="btn-primary mt-8 block w-full">Login</button>
