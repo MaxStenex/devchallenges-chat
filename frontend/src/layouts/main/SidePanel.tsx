@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import { Channel, ChannelsContent } from "./ChannelsContent";
 import { ChannelInfoContent } from "./ChannelInfoContent";
 import { useRouter } from "next/router";
-import Image from "next/image";
-import { UserInfoPannel } from "./UserInfoPannel";
+import { UserInfoPanel } from "./UserInfoPanel";
 
-export const SidePannel = () => {
+export const SidePanel = () => {
   const router = useRouter();
 
   const [content, setContent] = useState<"channels" | "channel-info">(() => {
@@ -31,7 +30,7 @@ export const SidePannel = () => {
           <ChannelInfoContent onGoHomeClick={onGoHomeClick} />
         )}
       </div>
-      <UserInfoPannel />
+      <UserInfoPanel />
     </div>
   );
 };

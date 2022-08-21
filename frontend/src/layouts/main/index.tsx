@@ -1,5 +1,5 @@
 import React from "react";
-import { SidePannel } from "./SidePannel";
+import { SidePanel } from "./SidePanel";
 
 type Props = {
   children: React.ReactNode;
@@ -8,7 +8,7 @@ type Props = {
 export const MainLayout: React.FC<Props> = ({ children }) => {
   return (
     <div className="flex h-screen">
-      <SidePannel />
+      <SidePanel />
       <div className="flex-1 bg-zinc-800">{children}</div>
     </div>
   );

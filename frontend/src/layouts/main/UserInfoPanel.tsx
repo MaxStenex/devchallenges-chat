@@ -6,7 +6,7 @@ import { useUser } from "state/user";
 
 const dropdownItemClassname = "text-medium text-sm flex";
 
-export const UserInfoPannel = () => {
+export const UserInfoPanel = () => {
   const [dropdownIsOpened, setDropdownIsOpened] = useState(false);
   const { logoutUser } = useUser();
 
