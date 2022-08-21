@@ -24,3 +24,7 @@ export const register = ({
 export const authMe = () => {
   return api.get("auth/me");
 };
+
+export const logout = () => {
+  return api.post("auth/logout");
+};

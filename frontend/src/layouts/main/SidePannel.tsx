@@ -3,6 +3,7 @@ import { Channel, ChannelsContent } from "./ChannelsContent";
 import { ChannelInfoContent } from "./ChannelInfoContent";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { UserInfoPannel } from "./UserInfoPannel";
 
 export const SidePannel = () => {
   const router = useRouter();
@@ -30,24 +31,7 @@ export const SidePannel = () => {
           <ChannelInfoContent onGoHomeClick={onGoHomeClick} />
         )}
       </div>
-      <div className="bg-black py-3 pr-5 pl-8">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <div className="rounded overflow-hidden w-11 h-11 relative mr-7">
-              <Image
-                src="/images/avatar-placeholder.png"
-                layout="fill"
-                alt=""
-                objectFit="cover"
-              />
-            </div>
-            <span className="font-bold text-lg text-gray-500">Xanthe Neal</span>
-          </div>
-          <button className="flex">
-            <Image width={15} height={15} src="/icons/dropdown.svg" alt="" />
-          </button>
-        </div>
-      </div>
+      <UserInfoPannel />
     </div>
   );
 };

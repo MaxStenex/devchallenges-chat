@@ -16,6 +16,8 @@ const defaultValue = {
 
   isLoading: true,
   setIsLoading: (val: boolean) => {},
+
+  logoutUser: () => {},
 };
 
 const UserContext = createContext(defaultValue);
@@ -47,8 +49,12 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [isLoading, router, userIsFetched]);
 
+  const logoutUser = () => {
+    setUser(userInitialValue);
+  };
+
   return (
-    <UserContext.Provider value={{ user, setUser, isLoading, setIsLoading }}>
+    <UserContext.Provider value={{ user, setUser, isLoading, setIsLoading, logoutUser }}>
       <UserPathHandler>{children}</UserPathHandler>
     </UserContext.Provider>
   );
