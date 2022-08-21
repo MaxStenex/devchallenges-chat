@@ -47,8 +47,6 @@ export const LoginForm = () => {
       if ((error as any)?.response?.status === 401) {
         const message = "Invalid email or password";
 
-        console.log(error);
-
         setError("email", {
           message,
         });

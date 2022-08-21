@@ -3,6 +3,8 @@ import { TextField } from "components/ui";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
+import { register as registerUser } from "api/auth";
+import { useRouter } from "next/router";
 
 const validationSchema = z
   .object({
@@ -26,27 +28,41 @@ const validationSchema = z
     path: ["confirmPassword"],
   });
 
-type FormInputs = z.infer<typeof validationSchema>;
+export type RegisterFormInputs = z.infer<typeof validationSchema>;
 
 export const RegisterForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormInputs>({
+    setError,
+  } = useForm<RegisterFormInputs>({
     resolver: zodResolver(validationSchema),
   });
 
-  const onSubmit: SubmitHandler<FormInputs> = async ({
+  const router = useRouter();
+
+  const onSubmit: SubmitHandler<RegisterFormInputs> = async ({
     email,
     username,
     password,
-    confirmPassword,
   }) => {
     try {
-      console.log(email, username, password, confirmPassword);
+      await registerUser({
+        email,
+        password,
+        username,
+      });
+
+      router.push("/login");
     } catch (error) {
-      console.log(error);
+      const errorMessage = (error as any)?.response?.data?.message || "";
+
+      if (errorMessage?.toLowerCase().includes("email")) {
+        setError("email", {
+          message: errorMessage,
+        });
+      }
     }
   };
 
