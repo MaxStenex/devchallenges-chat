@@ -79,4 +79,17 @@ export class AuthService {
       );
     }
   }
+
+  async logout(res: Response) {
+    try {
+      res.clearCookie(cookieAuthTokenName);
+
+      return {
+        status: HttpStatus.OK,
+        message: "Logout successfully",
+      };
+    } catch (error) {
+      throw new HttpException("Unauthorized", HttpStatus.UNAUTHORIZED);
+    }
+  }
 }
