@@ -1,8 +1,9 @@
-export const prepareUserData = (data: any) => {
+import { UserType } from "state/user";
+
+export const prepareUserData = (data: any): UserType => {
   return {
     id: data.id,
     email: data.email,
-    loggedIn: true,
     username: data.username,
   };
 };

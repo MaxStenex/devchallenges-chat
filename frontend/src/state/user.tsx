@@ -10,13 +10,15 @@ const userInitialValue = {
   loggedIn: false,
 };
 
+export type UserType = Omit<typeof userInitialValue, "loggedIn">;
+
 const defaultValue = {
   user: userInitialValue,
-  setUser: (val: typeof userInitialValue) => {},
 
   isLoading: true,
   setIsLoading: (val: boolean) => {},
 
+  loginUser: (data: UserType) => {},
   logoutUser: () => {},
 };
 
@@ -29,6 +31,14 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const router = useRouter();
 
+  const logoutUser = () => {
+    setUser(userInitialValue);
+  };
+
+  const loginUser = (data: UserType) => {
+    setUser({ ...data, loggedIn: true });
+  };
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -36,7 +46,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         const { data } = await authMe();
         if (!data) return;
-        setUser(prepareUserData(data));
+        loginUser(prepareUserData(data));
       } catch (error) {
       } finally {
         setIsLoading(false);
@@ -49,12 +59,10 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [isLoading, router, userIsFetched]);
 
-  const logoutUser = () => {
-    setUser(userInitialValue);
-  };
-
   return (
-    <UserContext.Provider value={{ user, setUser, isLoading, setIsLoading, logoutUser }}>
+    <UserContext.Provider
+      value={{ user, isLoading, setIsLoading, logoutUser, loginUser }}
+    >
       <UserPathHandler>{children}</UserPathHandler>
     </UserContext.Provider>
   );

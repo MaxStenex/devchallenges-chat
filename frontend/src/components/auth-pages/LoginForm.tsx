@@ -31,7 +31,7 @@ export const LoginForm = () => {
     resolver: zodResolver(validationSchema),
   });
 
-  const { setUser } = useUser();
+  const { loginUser } = useUser();
 
   const router = useRouter();
 
@@ -41,7 +41,7 @@ export const LoginForm = () => {
 
       if (!data) return;
 
-      setUser(prepareUserData(data));
+      loginUser(prepareUserData(data));
       router.push("/");
     } catch (error) {
       if ((error as any)?.response?.status === 401) {
