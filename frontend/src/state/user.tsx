@@ -14,11 +14,9 @@ const defaultValue = {
   user: userInitialValue,
   setUser: (val: typeof userInitialValue) => {},
 
-  isLoading: false,
+  isLoading: true,
   setIsLoading: (val: boolean) => {},
 };
-
-const unprotectedPages = ["/login", "/register"];
 
 const UserContext = createContext(defaultValue);
 
@@ -31,22 +29,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     const fetchUser = async () => {
-      const userOnUnprotectedPage = unprotectedPages.some(
-        (path) => path === router.pathname
-      );
-
       try {
         setIsLoading(true);
 
         const { data } = await authMe();
-        if (!data) throw new Error("Unauthenticated");
+        if (!data) return;
         setUser(prepareUserData(data));
-
-        if (userOnUnprotectedPage) router.push("/");
       } catch (error) {
-        if (!userOnUnprotectedPage) {
-          router.push("/login");
-        }
       } finally {
         setIsLoading(false);
         setUserIsFetched(true);
@@ -58,15 +47,41 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [isLoading, router, userIsFetched]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <UserContext.Provider value={{ user, setUser, isLoading, setIsLoading }}>
-      {children}
+      <UserPathHandler>{children}</UserPathHandler>
     </UserContext.Provider>
   );
 };
 
 export const useUser = () => useContext(UserContext);
+
+function UserPathHandler({ children }: any) {
+  const router = useRouter();
+  const {
+    user: { loggedIn },
+    isLoading,
+  } = useUser();
+
+  const userOnAuthPage = router.pathname === "/login" || router.pathname === "/register";
+
+  useEffect(() => {
+    if (!isLoading && !loggedIn && !userOnAuthPage) {
+      router.push("/login");
+    }
+
+    if (!isLoading && loggedIn && userOnAuthPage) {
+      router.push("/");
+    }
+  }, [isLoading, loggedIn, userOnAuthPage]);
+
+  if ((isLoading || !loggedIn) && !userOnAuthPage) {
+    return "Loading...";
+  }
+
+  if (loggedIn && userOnAuthPage) {
+    return "Loading...";
+  }
+
+  return children;
+}
