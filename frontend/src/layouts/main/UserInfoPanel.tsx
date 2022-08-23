@@ -21,7 +21,7 @@ export const UserInfoPanel = () => {
     }
   );
 
-  const { logoutUser } = useUser();
+  const { logoutUser, user } = useUser();
 
   const router = useRouter();
 
@@ -48,7 +48,7 @@ export const UserInfoPanel = () => {
               objectFit="cover"
             />
           </div>
-          <span className="font-bold text-lg text-gray-500">Xanthe Neal</span>
+          <span className="font-bold text-lg text-gray-500">{user.username}</span>
         </div>
         <div className="relative">
           {dropdownIsOpened && (
