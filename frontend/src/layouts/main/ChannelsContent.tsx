@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
+import { useDebounce } from "hooks";
 
 export type Channel = {
   id: number;
@@ -32,6 +33,8 @@ export const ChannelsContent: React.FC<Props> = ({ onChannelClick }) => {
   const [channels] = useState<Channel[]>(dummyChannels);
   const [filteredChannels, setFilteredChannels] = useState<Channel[]>(channels);
 
+  const [searchValue, setSearchValue] = useState("");
+
   const onChannelsSearch = (val: string) => {
     if (val === "") return setFilteredChannels(channels);
 
@@ -39,6 +42,10 @@ export const ChannelsContent: React.FC<Props> = ({ onChannelClick }) => {
       dummyChannels.filter((ch) => ch.name.trim().toLocaleLowerCase().includes(val))
     );
   };
+
+  useDebounce(() => {
+    onChannelsSearch(searchValue.trim().toLowerCase());
+  }, 100);
 
   return (
     <div className="">
@@ -53,7 +60,8 @@ export const ChannelsContent: React.FC<Props> = ({ onChannelClick }) => {
           placeholder="Search"
           type="text"
           className="input-primary"
-          onChange={(e) => onChannelsSearch(e.target.value.trim().toLowerCase())}
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
         />
       </div>
       <ul className="space-y-5 mb-5">
