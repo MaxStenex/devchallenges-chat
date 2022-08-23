@@ -63,39 +63,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     <UserContext.Provider
       value={{ user, isLoading, setIsLoading, logoutUser, loginUser }}
     >
-      <UserPathHandler>{children}</UserPathHandler>
+      {children}
     </UserContext.Provider>
   );
 };
 
 export const useUser = () => useContext(UserContext);
-
-function UserPathHandler({ children }: any) {
-  const router = useRouter();
-  const {
-    user: { loggedIn },
-    isLoading,
-  } = useUser();
-
-  const userOnAuthPage = router.pathname === "/login" || router.pathname === "/register";
-
-  useEffect(() => {
-    if (!isLoading && !loggedIn && !userOnAuthPage) {
-      router.push("/login");
-    }
-
-    if (!isLoading && loggedIn && userOnAuthPage) {
-      router.push("/");
-    }
-  }, [isLoading, loggedIn, userOnAuthPage]);
-
-  if ((isLoading || !loggedIn) && !userOnAuthPage) {
-    return "Loading...";
-  }
-
-  if (loggedIn && userOnAuthPage) {
-    return "Loading...";
-  }
-
-  return children;
-}

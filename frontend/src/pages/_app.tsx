@@ -5,6 +5,7 @@ import "../styles/global.css";
 import type { ReactElement, ReactNode } from "react";
 import React from "react";
 import { UserProvider } from "state/user";
+import { RoutsWrapper } from "router";
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -17,7 +18,11 @@ type ExtendedAppProps = AppProps & {
 function MyApp({ Component, pageProps }: ExtendedAppProps) {
   const getLayout = Component.getLayout ?? ((page) => <MainLayout>{page}</MainLayout>);
 
-  return <UserProvider>{getLayout(<Component {...pageProps} />)}</UserProvider>;
+  return (
+    <UserProvider>
+      <RoutsWrapper>{getLayout(<Component {...pageProps} />)}</RoutsWrapper>
+    </UserProvider>
+  );
 }
 
 export default MyApp;

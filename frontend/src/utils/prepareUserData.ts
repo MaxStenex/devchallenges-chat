@@ -1,4 +1,4 @@
-import { UserType } from "state/user";
+import type { UserType } from "state/user";
 
 export const prepareUserData = (data: any): UserType => {
   return {
