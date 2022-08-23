@@ -1,13 +1,26 @@
-import React, { useState } from "react";
-import Image from "next/image";
 import { logout } from "api/auth";
+import { useOnOutsideClick } from "hooks";
+import Image from "next/image";
 import { useRouter } from "next/router";
+import { useRef, useState } from "react";
 import { useUser } from "state/user";
 
 const dropdownItemClassname = "text-medium text-sm flex";
 
 export const UserInfoPanel = () => {
+  const dropdownTogglerRef = useRef<HTMLButtonElement>(null);
   const [dropdownIsOpened, setDropdownIsOpened] = useState(false);
+  const dropdownWrapperRef = useOnOutsideClick<HTMLDivElement>(
+    () => {
+      if (dropdownIsOpened) {
+        setDropdownIsOpened(false);
+      }
+    },
+    {
+      excludeRefs: [dropdownTogglerRef],
+    }
+  );
+
   const { logoutUser } = useUser();
 
   const router = useRouter();
@@ -42,6 +55,7 @@ export const UserInfoPanel = () => {
             <div
               className="absolute right-full bottom-full bg-slate-500 rounded-md
               py-4 px-3 border-gray-600 border-2 w-24"
+              ref={dropdownWrapperRef}
             >
               <div className="pb-2 border-b-2 border-b-gray-300">
                 <button className={`${dropdownItemClassname} text-gray-100`}>
@@ -58,7 +72,11 @@ export const UserInfoPanel = () => {
               </div>
             </div>
           )}
-          <button className="flex" onClick={() => setDropdownIsOpened((prev) => !prev)}>
+          <button
+            ref={dropdownTogglerRef}
+            className="flex"
+            onClick={() => setDropdownIsOpened((prev) => !prev)}
+          >
             <Image width={15} height={15} src="/icons/dropdown.svg" alt="" />
           </button>
         </div>
