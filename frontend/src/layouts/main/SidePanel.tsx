@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo } from "react";
 import { Channel, ChannelsContent } from "./ChannelsContent";
 import { ChannelInfoContent } from "./ChannelInfoContent";
 import { useRouter } from "next/router";
@@ -7,19 +7,17 @@ import { UserInfoPanel } from "./UserInfoPanel";
 export const SidePanel = () => {
   const router = useRouter();
 
-  const [content, setContent] = useState<"channels" | "channel-info">(() => {
+  const content = useMemo<"channels" | "channel-info">(() => {
     if (router.pathname === "/channel/[id]") return "channel-info";
     return "channels";
-  });
+  }, [router.pathname]);
 
   const onChannelClick = (c: Channel) => {
     router.push(`/channel/${c.id}`);
-    setContent("channel-info");
   };
 
   const onGoHomeClick = () => {
     router.push("/");
-    setContent("channels");
   };
 
   return (
