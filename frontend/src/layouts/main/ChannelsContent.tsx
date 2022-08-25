@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useDebounce } from "hooks";
+import { CreateChannelPopup } from "components/shared/popups";
 
 export type Channel = {
   id: number;
@@ -30,6 +31,9 @@ type Props = {
 };
 
 export const ChannelsContent: React.FC<Props> = ({ onChannelClick }) => {
+  const [openedPopup, setOpenedPopup] = useState<"" | "createChannel">("");
+  const closePopup = () => setOpenedPopup("");
+
   const [channels] = useState<Channel[]>(dummyChannels);
   const [filteredChannels, setFilteredChannels] = useState<Channel[]>(channels);
 
@@ -49,9 +53,16 @@ export const ChannelsContent: React.FC<Props> = ({ onChannelClick }) => {
 
   return (
     <div className="">
+      {openedPopup === "createChannel" && <CreateChannelPopup onClose={closePopup} />}
       <div className="flex justify-between items-center py-3 mb-3">
         <h3 className="text-gray-100 text-lg">Channels</h3>
-        <button className="bg-gray-700 rounded w-8 h-8">
+        <button
+          className="bg-gray-700 rounded w-8 h-8"
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpenedPopup("createChannel");
+          }}
+        >
           <Image width={14} height={14} src="/icons/plus.svg" alt="" />
         </button>
       </div>

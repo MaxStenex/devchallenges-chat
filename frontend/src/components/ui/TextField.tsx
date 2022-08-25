@@ -1,7 +1,7 @@
 import React from "react";
 
 type Props = {
-  label: string;
+  label?: string;
   error?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
@@ -9,7 +9,7 @@ export const TextField = React.forwardRef<HTMLInputElement, Props>(
   ({ label, error, ...props }, ref) => {
     return (
       <label className="flex flex-col">
-        <span className="font-medium mb-2 text-sm">{label}</span>
+        {label && <span className="font-medium mb-2 text-sm">{label}</span>}
         <input
           {...props}
           type={props.type || "text"}
