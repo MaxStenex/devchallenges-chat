@@ -5,6 +5,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { register as registerUser } from "api/auth";
 import { useRouter } from "next/router";
+import { useToasts } from "state/toasts";
 
 const validationSchema = z
   .object({
@@ -40,6 +41,8 @@ export const RegisterForm = () => {
     resolver: zodResolver(validationSchema),
   });
 
+  const { addToast } = useToasts();
+
   const router = useRouter();
 
   const onSubmit: SubmitHandler<RegisterFormInputs> = async ({
@@ -54,6 +57,9 @@ export const RegisterForm = () => {
         username,
       });
 
+      addToast("Registered successfully", {
+        appearance: "success",
+      });
       router.push("/login");
     } catch (error) {
       const errorMessage = (error as any)?.response?.data?.message || "";
