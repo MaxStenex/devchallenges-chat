@@ -7,6 +7,7 @@ import React from "react";
 import { UserProvider } from "state/user";
 import { ToastProvider } from "state/toasts";
 import { RoutsWrapper } from "router";
+import Head from "next/head";
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -20,11 +21,16 @@ function MyApp({ Component, pageProps }: ExtendedAppProps) {
   const getLayout = Component.getLayout ?? ((page) => <MainLayout>{page}</MainLayout>);
 
   return (
-    <ToastProvider autoDismiss autoDismissTimeout={3000} placement="bottom-right">
-      <UserProvider>
-        <RoutsWrapper>{getLayout(<Component {...pageProps} />)}</RoutsWrapper>
-      </UserProvider>
-    </ToastProvider>
+    <>
+      <Head>
+        <title>Devchallenges Chat</title>
+      </Head>
+      <ToastProvider autoDismiss autoDismissTimeout={3000} placement="bottom-right">
+        <UserProvider>
+          <RoutsWrapper>{getLayout(<Component {...pageProps} />)}</RoutsWrapper>
+        </UserProvider>
+      </ToastProvider>
+    </>
   );
 }
 
