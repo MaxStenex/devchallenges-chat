@@ -1,10 +1,11 @@
 import { TextField } from "components/ui";
-import React from "react";
+import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { PopupWrapper } from ".";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
+import { createChannel } from "api/channels";
 
 const validationSchema = z.object({
   name: z.string().min(1, "Name is required.").max(255, "Max name length is 255."),
@@ -33,8 +34,11 @@ export const CreateChannelPopup: React.FC<Props> = ({ onClose }) => {
 
   const onSubmit: SubmitHandler<CreateChannelInputs> = async ({ description, name }) => {
     try {
-      console.log(description, name);
-      const channelId = 123;
+      const { data } = await createChannel({ description, name });
+
+      if (!data) return;
+
+      const channelId = data?.id;
 
       router.push(`/channel/${channelId}`);
       onClose();

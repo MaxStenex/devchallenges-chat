@@ -22,7 +22,7 @@ export const SidePanel = () => {
 
   return (
     <div className="w-80 bg-neutral-900 flex flex-col">
-      <div className="w-full flex-1 pt-3 pr-5 pl-8">
+      <div className="w-full flex-1 pt-3 pr-5 pl-8 flex flex-col">
         {content === "channels" && <ChannelsContent onChannelClick={onChannelClick} />}
         {content === "channel-info" && (
           <ChannelInfoContent onGoHomeClick={onGoHomeClick} />

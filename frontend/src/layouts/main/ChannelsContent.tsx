@@ -1,23 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useDebounce } from "hooks";
 import { CreateChannelPopup } from "components/shared/popups";
+import { getUserChannels } from "api/channels";
+import { Loader } from "components/shared/loaders";
 
 export type Channel = {
   id: number;
   name: string;
 };
-
-const dummyChannels: Channel[] = [
-  {
-    id: 1,
-    name: "Frontend Developers",
-  },
-  {
-    id: 2,
-    name: "Default",
-  },
-];
 
 const getChannelLettersPreview = (name: string): string => {
   return name
@@ -31,10 +22,12 @@ type Props = {
 };
 
 export const ChannelsContent: React.FC<Props> = ({ onChannelClick }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const [openedPopup, setOpenedPopup] = useState<"" | "createChannel">("");
   const closePopup = () => setOpenedPopup("");
 
-  const [channels] = useState<Channel[]>(dummyChannels);
+  const [channels, setChannels] = useState<Channel[]>([]);
   const [filteredChannels, setFilteredChannels] = useState<Channel[]>(channels);
 
   const [searchValue, setSearchValue] = useState("");
@@ -43,16 +36,36 @@ export const ChannelsContent: React.FC<Props> = ({ onChannelClick }) => {
     if (val === "") return setFilteredChannels(channels);
 
     setFilteredChannels(
-      dummyChannels.filter((ch) => ch.name.trim().toLocaleLowerCase().includes(val))
+      channels.filter((ch) => ch.name.trim().toLocaleLowerCase().includes(val))
     );
   };
+
+  useEffect(() => {
+    const loadUserChannel = async () => {
+      try {
+        setIsLoading(true);
+
+        const { data } = await getUserChannels();
+
+        if (Array.isArray(data)) {
+          setChannels(data);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadUserChannel();
+  }, []);
 
   useDebounce(() => {
     onChannelsSearch(searchValue.trim().toLowerCase());
   }, 100);
 
   return (
-    <div className="">
+    <div className="flex-1 flex flex-col">
       {openedPopup === "createChannel" && <CreateChannelPopup onClose={closePopup} />}
       <div className="flex justify-between items-center py-3 mb-3">
         <h3 className="text-gray-100 text-lg">Channels</h3>
@@ -75,22 +88,28 @@ export const ChannelsContent: React.FC<Props> = ({ onChannelClick }) => {
           onChange={(e) => setSearchValue(e.target.value)}
         />
       </div>
-      <ul className="space-y-5 mb-5">
-        {filteredChannels.map((c) => (
-          <li
-            key={c.id}
-            className="flex items-center cursor-pointer"
-            onClick={() => onChannelClick(c)}
-          >
-            <span
-              className="bg-gray-700 rounded w-9 h-9 font-semibold
-              text-lg flex items-center justify-center text-white mr-3"
+      <ul className="space-y-5 mb-5 flex-1">
+        {isLoading ? (
+          <div className="h-full flex items-center justify-center">
+            <Loader size={32} />
+          </div>
+        ) : (
+          filteredChannels.map((c) => (
+            <li
+              key={c.id}
+              className="flex items-center cursor-pointer"
+              onClick={() => onChannelClick(c)}
             >
-              {getChannelLettersPreview(c.name)}
-            </span>
-            <span className="font-bold text-lg uppercase text-gray-400">{c.name}</span>
-          </li>
-        ))}
+              <span
+                className="bg-gray-700 rounded w-9 h-9 font-semibold
+              text-lg flex items-center justify-center text-white mr-3"
+              >
+                {getChannelLettersPreview(c.name)}
+              </span>
+              <span className="font-bold text-lg uppercase text-gray-400">{c.name}</span>
+            </li>
+          ))
+        )}
       </ul>
     </div>
   );
