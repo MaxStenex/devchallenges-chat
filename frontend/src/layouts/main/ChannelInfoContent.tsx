@@ -2,18 +2,14 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { getChannelById } from "api/channels";
-import { Channel } from "./ChannelsContent";
+import { Channel } from "types/channel";
 
 type Props = {
   onGoHomeClick: () => void;
 };
 
-type ChannelInfo = Channel & {
-  description: string;
-};
-
 export const ChannelInfoContent: React.FC<Props> = ({ onGoHomeClick }) => {
-  const [channelInfo, setChannelInfo] = useState<ChannelInfo | null>(null);
+  const [channelInfo, setChannelInfo] = useState<Channel | null>(null);
 
   const router = useRouter();
   const channelId =

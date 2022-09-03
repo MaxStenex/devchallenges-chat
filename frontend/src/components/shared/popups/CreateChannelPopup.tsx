@@ -1,11 +1,11 @@
-import { TextField } from "components/ui";
-import React, { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { PopupWrapper } from ".";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/router";
 import { createChannel } from "api/channels";
+import { TextField } from "components/ui";
+import { useRouter } from "next/router";
+import React from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
+import { PopupWrapper } from ".";
 
 const validationSchema = z.object({
   name: z.string().min(1, "Name is required.").max(255, "Max name length is 255."),

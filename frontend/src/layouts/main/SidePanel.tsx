@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Channel, ChannelsContent } from "./ChannelsContent";
+import { ChannelsContent, ChannePanellItem } from "./ChannelsContent";
 import { ChannelInfoContent } from "./ChannelInfoContent";
 import { useRouter } from "next/router";
 import { UserInfoPanel } from "./UserInfoPanel";
@@ -12,7 +12,7 @@ export const SidePanel = () => {
     return "channels";
   }, [router.pathname]);
 
-  const onChannelClick = (c: Channel) => {
+  const onChannelClick = (c: ChannePanellItem) => {
     router.push(`/channel/${c.id}`);
   };
 

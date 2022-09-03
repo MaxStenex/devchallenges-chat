@@ -4,11 +4,9 @@ import { useDebounce } from "hooks";
 import { CreateChannelPopup } from "components/shared/popups";
 import { getUserChannels } from "api/channels";
 import { Loader } from "components/shared/loaders";
+import { Channel } from "types/channel";
 
-export type Channel = {
-  id: number;
-  name: string;
-};
+export type ChannePanellItem = Pick<Channel, "id" | "name">;
 
 const getChannelLettersPreview = (name: string): string => {
   return name
@@ -18,7 +16,7 @@ const getChannelLettersPreview = (name: string): string => {
 };
 
 type Props = {
-  onChannelClick: (c: Channel) => void;
+  onChannelClick: (c: ChannePanellItem) => void;
 };
 
 export const ChannelsContent: React.FC<Props> = ({ onChannelClick }) => {
@@ -27,8 +25,8 @@ export const ChannelsContent: React.FC<Props> = ({ onChannelClick }) => {
   const [openedPopup, setOpenedPopup] = useState<"" | "createChannel">("");
   const closePopup = () => setOpenedPopup("");
 
-  const [channels, setChannels] = useState<Channel[]>([]);
-  const [filteredChannels, setFilteredChannels] = useState<Channel[]>(channels);
+  const [channels, setChannels] = useState<ChannePanellItem[]>([]);
+  const [filteredChannels, setFilteredChannels] = useState<ChannePanellItem[]>(channels);
 
   const [searchValue, setSearchValue] = useState("");
 
