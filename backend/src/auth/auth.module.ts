@@ -3,8 +3,8 @@ import { AuthService } from "./auth.service";
 import { AuthController } from "./auth.controller";
 import { PrismaModule } from "src/prisma/prisma.module";
 import { JwtModule } from "@nestjs/jwt";
-import { jwtConstants } from "./constants";
 import { JwtStrategy } from "./jwt.strategy";
+import { envNames } from "src/constants";
 
 @Module({
   providers: [AuthService, JwtStrategy],
@@ -12,7 +12,7 @@ import { JwtStrategy } from "./jwt.strategy";
   imports: [
     PrismaModule,
     JwtModule.register({
-      secret: jwtConstants.secret,
+      secret: process.env[envNames.jwt_secret],
       signOptions: { expiresIn: "10h" },
     }),
   ],
