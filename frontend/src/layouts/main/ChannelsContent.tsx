@@ -100,7 +100,7 @@ export const ChannelsContent: React.FC<Props> = ({ onChannelClick }) => {
             >
               <span
                 className="bg-gray-700 rounded w-9 h-9 font-semibold
-              text-lg flex items-center justify-center text-white mr-3"
+                text-lg flex items-center justify-center text-white mr-3 uppercase"
               >
                 {getChannelLettersPreview(c.name)}
               </span>

@@ -8,8 +8,12 @@ type Props = {
   onGoHomeClick: () => void;
 };
 
+type ChannelInfo = Channel & {
+  members: { id: number; username: string }[];
+};
+
 export const ChannelInfoContent: React.FC<Props> = ({ onGoHomeClick }) => {
-  const [channelInfo, setChannelInfo] = useState<Channel | null>(null);
+  const [channelInfo, setChannelInfo] = useState<ChannelInfo | null>(null);
 
   const router = useRouter();
   const channelId =
@@ -22,10 +26,16 @@ export const ChannelInfoContent: React.FC<Props> = ({ onGoHomeClick }) => {
           id: data.id,
           description: data.description,
           name: data.name,
+          members: data.users.map((u: any) => ({
+            id: u.id,
+            username: u.username,
+          })),
         })
       );
     }
   }, [channelId]);
+
+  console.log(channelInfo);
 
   return (
     <div className="">
@@ -42,8 +52,20 @@ export const ChannelInfoContent: React.FC<Props> = ({ onGoHomeClick }) => {
       </div>
       {channelInfo && (
         <div className="text-gray-100">
-          <h3 className="font-bold text-lg mb-4 uppercase">{channelInfo.name}</h3>
-          <div className="text-lg leading-4">{channelInfo.description}</div>
+          <div className="mb-10">
+            <h3 className="font-bold text-lg mb-4 uppercase">{channelInfo.name}</h3>
+            <div className="text-lg leading-4">{channelInfo.description}</div>
+          </div>
+          <div className="">
+            <h4 className="font-bold text-lg uppercase mb-6">Members</h4>
+            <div className="space-y-3">
+              {channelInfo.members.map((m) => (
+                <div key={m.id} className="font-bold text-gray-300">
+                  {m.username}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       )}
     </div>

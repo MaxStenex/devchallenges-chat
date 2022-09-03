@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateChannelDto } from "./dto/create-channel.dto";
-import { Channel } from "@prisma/client";
+import { Channel, User } from "@prisma/client";
 
 @Injectable()
 export class ChannelService {
@@ -51,7 +51,9 @@ export class ChannelService {
     }
   }
 
-  async getChannelById(id: number): Promise<Channel> {
+  async getChannelById(
+    id: number,
+  ): Promise<Channel & { users: Pick<User, "id" | "username">[] }> {
     try {
       if (!id) throw new Error("");
 
@@ -61,7 +63,21 @@ export class ChannelService {
         },
       });
 
-      return channel;
+      const channelUsers = await this.prisma.user.findMany({
+        where: {
+          channels: {
+            some: {
+              channelId: id,
+            },
+          },
+        },
+        select: {
+          id: true,
+          username: true,
+        },
+      });
+
+      return { ...channel, users: channelUsers };
     } catch (error) {
       throw new HttpException("Channel not found", HttpStatus.BAD_REQUEST);
     }
