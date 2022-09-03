@@ -8,3 +8,7 @@ export const getUserChannels = () => {
 export const createChannel = (formData: CreateChannelInputs) => {
   return api.post("channels/create", formData);
 };
+
+export const getChannelById = (id: number) => {
+  return api.get(`channels/${id}`);
+};

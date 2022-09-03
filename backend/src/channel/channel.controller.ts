@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Request,
   UseGuards,
@@ -30,5 +31,11 @@ export class ChannelController {
   @Get("/all")
   async getUserChannels(@Request() req) {
     return this.channelService.getUserChannels(req.user.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get("/:id")
+  async getChannelById(@Param() params) {
+    return this.channelService.getChannelById(parseInt(params.id));
   }
 }

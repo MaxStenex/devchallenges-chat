@@ -50,4 +50,20 @@ export class ChannelService {
       throw new HttpException("Channels not found", HttpStatus.BAD_REQUEST);
     }
   }
+
+  async getChannelById(id: number): Promise<Channel> {
+    try {
+      if (!id) throw new Error("");
+
+      const channel = await this.prisma.channel.findFirst({
+        where: {
+          id,
+        },
+      });
+
+      return channel;
+    } catch (error) {
+      throw new HttpException("Channel not found", HttpStatus.BAD_REQUEST);
+    }
+  }
 }
