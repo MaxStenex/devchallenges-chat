@@ -16,10 +16,18 @@ model User {
 }
 
 model Channel {
-  id          Int               @id @default(autoincrement())
-  name        String            @db.VarChar(255)
-  description String            @db.VarChar(255)
-  members     UsersOnChannels[]
+  id             Int                    @id @default(autoincrement())
+  name           String                 @db.VarChar(255)
+  description    String                 @db.VarChar(255)
+  members        UsersOnChannels[]
+  invitationLink ChannelInvitationLink?
+}
+
+model ChannelInvitationLink {
+  hash      String
+  createdAt DateTime @default(now())
+  channel   Channel  @relation(fields: [channelId], references: [id])
+  channelId Int      @unique
 }
 
 model UsersOnChannels {
