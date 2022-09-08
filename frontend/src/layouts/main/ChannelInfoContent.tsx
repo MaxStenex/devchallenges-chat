@@ -8,8 +8,10 @@ type Props = {
   onGoHomeClick: () => void;
 };
 
+type ChannelRole = "ADMIN" | "USER";
+
 type ChannelInfo = Channel & {
-  members: { id: number; username: string }[];
+  members: { id: number; username: string; role: ChannelRole }[];
 };
 
 export const ChannelInfoContent: React.FC<Props> = ({ onGoHomeClick }) => {
@@ -26,16 +28,15 @@ export const ChannelInfoContent: React.FC<Props> = ({ onGoHomeClick }) => {
           id: data.id,
           description: data.description,
           name: data.name,
-          members: data.users.map((u: any) => ({
-            id: u.id,
-            username: u.username,
+          members: data.members.map((m: any) => ({
+            id: m.user.id,
+            username: m.user.username,
+            role: m.role,
           })),
         })
       );
     }
   }, [channelId]);
-
-  console.log(channelInfo);
 
   return (
     <div className="">
@@ -52,9 +53,12 @@ export const ChannelInfoContent: React.FC<Props> = ({ onGoHomeClick }) => {
       </div>
       {channelInfo && (
         <div className="text-gray-100">
-          <div className="mb-10">
-            <h3 className="font-bold text-lg mb-4 uppercase">{channelInfo.name}</h3>
+          <div className="mb-10 space-y-4">
+            <h3 className="font-bold text-lg uppercase">{channelInfo.name}</h3>
             <div className="text-lg leading-4">{channelInfo.description}</div>
+            <button className="font-bold underline hover:no-underline">
+              Invite new member
+            </button>
           </div>
           <div className="">
             <h4 className="font-bold text-lg uppercase mb-6">Members</h4>
