@@ -51,9 +51,7 @@ export class ChannelService {
     }
   }
 
-  async getChannelById(
-    id: number,
-  ): Promise<Channel & { users: Pick<User, "id" | "username">[] }> {
+  async getChannelById(id: number) {
     try {
       if (!id) throw new Error("");
 
@@ -61,23 +59,22 @@ export class ChannelService {
         where: {
           id,
         },
-      });
-
-      const channelUsers = await this.prisma.user.findMany({
-        where: {
-          channels: {
-            some: {
-              channelId: id,
+        include: {
+          members: {
+            select: {
+              role: true,
+              user: {
+                select: {
+                  id: true,
+                  username: true,
+                },
+              },
             },
           },
         },
-        select: {
-          id: true,
-          username: true,
-        },
       });
 
-      return { ...channel, users: channelUsers };
+      return channel;
     } catch (error) {
       throw new HttpException("Channel not found", HttpStatus.BAD_REQUEST);
     }
