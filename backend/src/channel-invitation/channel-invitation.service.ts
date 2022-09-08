@@ -3,6 +3,9 @@ import { ChannelInvitationLink } from "@prisma/client";
 import { randomBytes } from "crypto";
 import { PrismaService } from "src/prisma/prisma.service";
 
+// 7 days
+const msForExpiration = 1000 * 60 * 60 * 24 * 7;
+
 @Injectable()
 export class ChannelInvitationService {
   constructor(private prisma: PrismaService) {}
@@ -15,9 +18,19 @@ export class ChannelInvitationService {
         },
       });
 
-      if (existingLink) {
+      const isLinkExpired =
+        new Date(existingLink.createdAt).getTime() + msForExpiration <
+        new Date().getTime();
+
+      if (existingLink && !isLinkExpired) {
         return existingLink.hash;
       }
+
+      await this.prisma.channelInvitationLink.delete({
+        where: {
+          channelId,
+        },
+      });
 
       const invitationLink = await this.createLink(channelId);
 
