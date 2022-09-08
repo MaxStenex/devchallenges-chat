@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateChannelDto } from "./dto/create-channel.dto";
-import { Channel, User } from "@prisma/client";
+import { Channel } from "@prisma/client";
 
 @Injectable()
 export class ChannelService {
