@@ -1,5 +1,4 @@
 import { Controller, Get, Param, UseGuards } from "@nestjs/common";
-import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { ChannelAdminGuard } from "src/channel/channel-admin.guard";
 import { ChannelInvitationService } from "./channel-invitation.service";
 
@@ -9,7 +8,7 @@ export class ChannelInvitationController {
     private readonly channelInvitationService: ChannelInvitationService,
   ) {}
 
-  @UseGuards(JwtAuthGuard, ChannelAdminGuard)
+  @UseGuards(ChannelAdminGuard)
   @Get("/:channelId")
   async getChannelId(@Param() params): Promise<string> {
     return this.channelInvitationService.getLink(parseInt(params.channelId));

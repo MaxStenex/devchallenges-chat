@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Request,
-  UseGuards,
-} from "@nestjs/common";
-import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
+import { Body, Controller, Get, Param, Post, Request } from "@nestjs/common";
 import { ChannelService } from "./channel.service";
 import { CreateChannelDto } from "./dto/create-channel.dto";
 
@@ -15,7 +6,6 @@ import { CreateChannelDto } from "./dto/create-channel.dto";
 export class ChannelController {
   constructor(private readonly channelService: ChannelService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Post("/create")
   async createChannel(
     @Request() req,
@@ -27,13 +17,11 @@ export class ChannelController {
     });
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get("/all")
   async getUserChannels(@Request() req) {
     return this.channelService.getUserChannels(req.user.id);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get("/:id")
   async getChannelById(@Param() params) {
     return this.channelService.getChannelById(parseInt(params.id));
