@@ -3,9 +3,9 @@ import { JwtService } from "@nestjs/jwt";
 import { User } from "@prisma/client";
 import * as bcrypt from "bcrypt";
 import type { Response } from "express";
+import { cookieAuthTokenName } from "src/constants";
 import { PrismaService } from "src/prisma/prisma.service";
 import { LoginDto, RegisterDto } from "./auth.dto";
-import { cookieAuthTokenName } from "./jwt.strategy";
 
 @Injectable()
 export class AuthService {
@@ -73,6 +73,7 @@ export class AuthService {
 
       return user;
     } catch (error) {
+      console.log(error);
       throw new HttpException(
         error.message || "Something went wrong",
         HttpStatus.UNAUTHORIZED,
