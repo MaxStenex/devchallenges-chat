@@ -10,7 +10,7 @@ export class ChannelInvitationController {
 
   @UseGuards(ChannelAdminGuard)
   @Get("/:channelId")
-  async getChannelId(@Param() params): Promise<string> {
+  async getLinkByChannelId(@Param() params): Promise<string> {
     return this.channelInvitationService.getLink(parseInt(params.channelId));
   }
 }

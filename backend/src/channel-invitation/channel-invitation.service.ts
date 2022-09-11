@@ -18,25 +18,26 @@ export class ChannelInvitationService {
         },
       });
 
-      const isLinkExpired =
-        new Date(existingLink.createdAt).getTime() + msForExpiration <
-        new Date().getTime();
+      if (existingLink) {
+        const isLinkExpired =
+          new Date(existingLink.createdAt).getTime() + msForExpiration <
+          new Date().getTime();
 
-      if (existingLink && !isLinkExpired) {
-        return existingLink.hash;
+        if (!isLinkExpired) {
+          return existingLink.hash;
+        } else {
+          await this.prisma.channelInvitationLink.delete({
+            where: {
+              channelId,
+            },
+          });
+        }
       }
-
-      await this.prisma.channelInvitationLink.delete({
-        where: {
-          channelId,
-        },
-      });
 
       const invitationLink = await this.createLink(channelId);
 
       return invitationLink.hash;
     } catch (error) {
-      console.log(error);
       throw new HttpException(
         error.message || "Link not found",
         HttpStatus.BAD_REQUEST,
