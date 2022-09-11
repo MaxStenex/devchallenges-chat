@@ -26,4 +26,9 @@ export class ChannelController {
   async getChannelById(@Param() params) {
     return this.channelService.getChannelById(parseInt(params.id));
   }
+
+  @Get("/by-invitation/:hash")
+  async getChannelByInvitationHash(@Param() params) {
+    return this.channelService.getChannelByInvitationHash(params.hash);
+  }
 }

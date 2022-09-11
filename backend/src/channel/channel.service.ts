@@ -79,4 +79,22 @@ export class ChannelService {
       throw new HttpException("Channel not found", HttpStatus.BAD_REQUEST);
     }
   }
+
+  async getChannelByInvitationHash(hash: string): Promise<Channel> {
+    try {
+      const channel = await this.prisma.channel.findFirst({
+        where: {
+          invitationLink: {
+            hash,
+          },
+        },
+      });
+
+      if (!channel) throw new Error("");
+
+      return channel;
+    } catch (error) {
+      throw new HttpException("Channel not found", HttpStatus.BAD_REQUEST);
+    }
+  }
 }

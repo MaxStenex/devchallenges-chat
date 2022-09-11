@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { ChannelInvitationLink } from "@prisma/client";
+import { Channel, ChannelInvitationLink } from "@prisma/client";
 import { randomBytes } from "crypto";
 import { PrismaService } from "src/prisma/prisma.service";
 
@@ -62,6 +62,52 @@ export class ChannelInvitationService {
       return invitationLink;
     } catch (error) {
       throw new Error();
+    }
+  }
+
+  async findChannelByInvitationHash(hash: string): Promise<Channel | null> {
+    try {
+      const channel = await this.prisma.channel.findFirst({
+        where: {
+          invitationLink: {
+            hash,
+          },
+        },
+      });
+
+      return channel;
+    } catch (error) {
+      throw new HttpException("Channel not found", HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async acceptInvitation({
+    userId,
+    channelId,
+  }: {
+    userId: number;
+    channelId: number;
+  }) {
+    try {
+      await this.prisma.usersOnChannels.create({
+        data: {
+          userId,
+          channelId,
+        },
+      });
+
+      return {
+        statusCode: 200,
+        message: "Successfully",
+      };
+    } catch (error) {
+      let message: string = error.message || "Something went wrong";
+
+      if (error.code === "P2002") {
+        message = "You are already a member of this channel";
+      }
+
+      throw new HttpException(message, HttpStatus.BAD_REQUEST);
     }
   }
 }
