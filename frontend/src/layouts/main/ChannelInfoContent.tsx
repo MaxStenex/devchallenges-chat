@@ -3,6 +3,9 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { getChannelById } from "api/channels";
 import { Channel } from "types/channel";
+import { getChannelInvitation } from "api/channel-invitation";
+import { useUser } from "state/user";
+import { useToasts } from "react-toast-notifications";
 
 type Props = {
   onGoHomeClick: () => void;
@@ -15,7 +18,15 @@ type ChannelInfo = Channel & {
 };
 
 export const ChannelInfoContent: React.FC<Props> = ({ onGoHomeClick }) => {
+  const { user } = useUser();
+  const { addToast } = useToasts();
+
   const [channelInfo, setChannelInfo] = useState<ChannelInfo | null>(null);
+  const channelAdmin = channelInfo?.members.find((m) => m.role === "ADMIN");
+
+  const userIsAdmin = channelAdmin?.id === user.id;
+
+  const [invitationLink, setInvitationLink] = useState("");
 
   const router = useRouter();
   const channelId =
@@ -38,6 +49,26 @@ export const ChannelInfoContent: React.FC<Props> = ({ onGoHomeClick }) => {
     }
   }, [channelId]);
 
+  useEffect(() => {
+    if (channelId && userIsAdmin) {
+      getChannelInvitation(channelId).then(({ data }) => setInvitationLink(data));
+    }
+  }, [channelId, userIsAdmin]);
+
+  const onInviteClick = async () => {
+    try {
+      const fullLink = `${window.location.host}/invite/${invitationLink}`;
+      await navigator.clipboard.writeText(fullLink);
+      addToast("Invitation link copied successfully", {
+        appearance: "success",
+      });
+    } catch (error) {
+      addToast("Something went wrong, please try again later", {
+        appearance: "error",
+      });
+    }
+  };
+
   return (
     <div className="">
       <div className="flex justify-between items-center py-3 mb-6">
@@ -56,9 +87,14 @@ export const ChannelInfoContent: React.FC<Props> = ({ onGoHomeClick }) => {
           <div className="mb-10 space-y-4">
             <h3 className="font-bold text-lg uppercase">{channelInfo.name}</h3>
             <div className="text-lg leading-4">{channelInfo.description}</div>
-            <button className="font-bold underline hover:no-underline">
-              Invite new member
-            </button>
+            {invitationLink && (
+              <button
+                onClick={onInviteClick}
+                className="font-bold underline hover:no-underline"
+              >
+                Invite new member
+              </button>
+            )}
           </div>
           <div className="">
             <h4 className="font-bold text-lg uppercase mb-6">Members</h4>
