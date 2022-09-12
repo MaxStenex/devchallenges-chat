@@ -1,4 +1,5 @@
 import { api } from "api";
+import { AxiosRequestConfig } from "axios";
 import { CreateChannelInputs } from "components/shared/popups/CreateChannelPopup";
 
 export const getUserChannels = () => {
@@ -11,4 +12,14 @@ export const createChannel = (formData: CreateChannelInputs) => {
 
 export const getChannelById = (id: number) => {
   return api.get(`channels/${id}`);
+};
+
+export const getChannelByInvitationHash = ({
+  hash,
+  config,
+}: {
+  hash: string;
+  config?: AxiosRequestConfig;
+}) => {
+  return api.get(`channels/by-invitation/${hash}`, config);
 };
