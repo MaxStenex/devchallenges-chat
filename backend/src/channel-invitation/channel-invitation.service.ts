@@ -102,12 +102,14 @@ export class ChannelInvitationService {
       };
     } catch (error) {
       let message: string = error.message || "Something went wrong";
+      let code = HttpStatus.INTERNAL_SERVER_ERROR;
 
       if (error.code === "P2002") {
         message = "You are already a member of this channel";
+        code = HttpStatus.BAD_REQUEST;
       }
 
-      throw new HttpException(message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(message, code);
     }
   }
 }
