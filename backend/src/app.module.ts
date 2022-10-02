@@ -7,6 +7,7 @@ import { ChannelInvitationModule } from "./channel-invitation/channel-invitation
 import { APP_GUARD } from "@nestjs/core";
 import { JwtAuthGuard } from "./jwt/jwt-auth.guard";
 import { JwtStrategy } from "./jwt/jwt.strategy";
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { JwtStrategy } from "./jwt/jwt.strategy";
     AuthModule,
     ChannelModule,
     ChannelInvitationModule,
+    UserModule,
   ],
   providers: [
     {
