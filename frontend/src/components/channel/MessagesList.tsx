@@ -8,7 +8,10 @@ const dummyMessages: MessageType[] = [
     fromSystem: false,
     sendDate: new Date(),
     text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum, error.",
-    username: "maxStenex",
+    sender: {
+      id: 1,
+      username: "maxStenex",
+    },
   },
   {
     id: 2,
@@ -21,7 +24,10 @@ const dummyMessages: MessageType[] = [
     fromSystem: false,
     sendDate: new Date(),
     text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum, error.",
-    username: "maxStenex",
+    sender: {
+      id: 1,
+      username: "maxStenex",
+    },
   },
 ];
 
