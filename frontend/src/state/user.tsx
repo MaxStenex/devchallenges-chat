@@ -1,16 +1,15 @@
 import { authMe } from "api/auth";
 import { useRouter } from "next/router";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { User } from "types/user";
 import { prepareUserData } from "utils/prepareUserData";
 
-const userInitialValue = {
+const userInitialValue: User & { loggedIn: boolean } = {
   id: 0,
   username: "",
   email: "",
   loggedIn: false,
 };
-
-export type UserType = Omit<typeof userInitialValue, "loggedIn">;
 
 const defaultValue = {
   user: userInitialValue,
@@ -18,7 +17,7 @@ const defaultValue = {
   isLoading: true,
   setIsLoading: (val: boolean) => {},
 
-  loginUser: (data: UserType) => {},
+  loginUser: (data: User) => {},
   logoutUser: () => {},
 };
 
@@ -35,7 +34,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(userInitialValue);
   };
 
-  const loginUser = (data: UserType) => {
+  const loginUser = (data: User) => {
     setUser({ ...data, loggedIn: true });
   };
 

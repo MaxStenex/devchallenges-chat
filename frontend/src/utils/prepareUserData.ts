@@ -1,6 +1,6 @@
-import type { UserType } from "state/user";
+import type { User } from "types/user";
 
-export const prepareUserData = (data: any): UserType => {
+export const prepareUserData = (data: any): User => {
   return {
     id: data.id,
     email: data.email,
