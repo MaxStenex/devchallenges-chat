@@ -13,6 +13,7 @@ model User {
   username String            @db.VarChar(50)
   password String            @db.VarChar(255)
   channels UsersOnChannels[]
+  messages Message[]
 }
 
 model Channel {
@@ -21,6 +22,16 @@ model Channel {
   description    String                 @db.VarChar(255)
   members        UsersOnChannels[]
   invitationLink ChannelInvitationLink?
+  messages       Message[]
+}
+
+model Message {
+  id        Int     @id @default(autoincrement())
+  text      String  @db.VarChar()
+  sender    User    @relation(fields: [senderId], references: [id])
+  senderId  Int
+  channel   Channel @relation(fields: [channelId], references: [id])
+  channelId Int
 }
 
 model ChannelInvitationLink {

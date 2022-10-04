@@ -8,6 +8,7 @@ import { APP_GUARD } from "@nestjs/core";
 import { JwtAuthGuard } from "./jwt/jwt-auth.guard";
 import { JwtStrategy } from "./jwt/jwt.strategy";
 import { UserModule } from './user/user.module';
+import { MessageModule } from './message/message.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UserModule } from './user/user.module';
     ChannelModule,
     ChannelInvitationModule,
     UserModule,
+    MessageModule,
   ],
   providers: [
     {
