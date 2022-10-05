@@ -1,14 +1,23 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { Channel, ChannelInvitationLink } from "@prisma/client";
+import { Channel, ChannelInvitationLink, Message } from "@prisma/client";
 import { randomBytes } from "crypto";
+import { CreateMessageDto } from "src/message/dto/create-message.dto";
+import { MessageGateway } from "src/message/message.gateway";
+import { MessageService } from "src/message/message.service";
 import { PrismaService } from "src/prisma/prisma.service";
+import { UserService } from "src/user/user.service";
 
 // 7 days
 const msForExpiration = 1000 * 60 * 60 * 24 * 7;
 
 @Injectable()
 export class ChannelInvitationService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private readonly messageService: MessageService,
+    private readonly messageGateway: MessageGateway,
+    private readonly userService: UserService,
+  ) {}
 
   async getLink(channelId: number): Promise<string> {
     try {
@@ -89,12 +98,30 @@ export class ChannelInvitationService {
     channelId: number;
   }) {
     try {
+      const user = await this.userService.findById(userId);
+
+      if (!user) throw new Error();
+
       await this.prisma.usersOnChannels.create({
         data: {
           userId,
           channelId,
         },
       });
+
+      const notifyMessage = await this.messageService
+        .create({
+          text: `Welcome! User ${user.username} joined this channel`,
+          channelId,
+          senderId: null,
+        })
+        .catch();
+
+      this.messageGateway.server
+        .to(`channel:${channelId}`)
+        .emit("new-message", {
+          data: notifyMessage,
+        });
 
       return {
         statusCode: 200,
