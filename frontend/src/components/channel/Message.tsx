@@ -6,8 +6,8 @@ type Props = MessageType;
 
 const textClassName = "text-gray-100 font-medium text-lg";
 
-export const Message: React.FC<Props> = ({ fromSystem, sendDate, text, username }) => {
-  if (fromSystem) {
+export const Message: React.FC<Props> = ({ sendDate, text, sender }) => {
+  if (!sender) {
     return (
       <div className="w-full mb-4">
         <div className={textClassName + " text-green-300"}>
@@ -33,7 +33,7 @@ export const Message: React.FC<Props> = ({ fromSystem, sendDate, text, username 
       </div>
       <div className="">
         <div className="text-gray-500 flex mb-1 items-center">
-          <span className="font-bold mr-4 text-lg">{username}</span>
+          <span className="font-bold mr-4 text-lg">{sender.username}</span>
           <span className="text-sm">{sendDate.toString()}</span>
         </div>
         <div className={textClassName}>{text}</div>

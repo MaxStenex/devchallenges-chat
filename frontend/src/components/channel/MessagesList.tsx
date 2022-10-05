@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useSocket } from "state/socket";
 import { Message as MessageType } from "types/message";
 import { Message } from "./";
 
 const dummyMessages: MessageType[] = [
   {
     id: 1,
-    fromSystem: false,
     sendDate: new Date(),
     text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum, error.",
     sender: {
@@ -15,13 +15,11 @@ const dummyMessages: MessageType[] = [
   },
   {
     id: 2,
-    fromSystem: true,
     sendDate: new Date(),
     text: "It is an system message",
   },
   {
     id: 3,
-    fromSystem: false,
     sendDate: new Date(),
     text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum, error.",
     sender: {
@@ -32,6 +30,14 @@ const dummyMessages: MessageType[] = [
 ];
 
 export const MessagesList = () => {
+  const { socket } = useSocket();
+
+  useEffect(() => {
+    socket.on("new-message", ({ data }) => {
+      console.log(data);
+    });
+  }, [socket]);
+
   return (
     <div className="w-full">
       {dummyMessages.map((m) => (
