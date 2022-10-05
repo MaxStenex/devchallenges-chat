@@ -1,7 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { Channel, ChannelInvitationLink, Message } from "@prisma/client";
+import { Channel, ChannelInvitationLink } from "@prisma/client";
 import { randomBytes } from "crypto";
-import { CreateMessageDto } from "src/message/dto/create-message.dto";
 import { MessageGateway } from "src/message/message.gateway";
 import { MessageService } from "src/message/message.service";
 import { PrismaService } from "src/prisma/prisma.service";
