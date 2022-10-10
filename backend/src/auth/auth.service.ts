@@ -73,7 +73,6 @@ export class AuthService {
 
       return user;
     } catch (error) {
-      console.log(error);
       throw new HttpException(
         error.message || "Something went wrong",
         HttpStatus.UNAUTHORIZED,

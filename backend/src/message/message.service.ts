@@ -23,13 +23,22 @@ export class MessageService {
     }
   }
 
-  async getByChannelId(channelId: number): Promise<Message[]> {
+  async getByChannelId(channelId: number) {
     try {
       const messages = await this.prismaService.message.findMany({
         where: {
           channelId,
         },
+        include: {
+          sender: {
+            select: {
+              id: true,
+              username: true,
+            },
+          },
+        },
       });
+
       return messages;
     } catch (error) {
       throw new HttpException("Messages not found", HttpStatus.BAD_REQUEST);
