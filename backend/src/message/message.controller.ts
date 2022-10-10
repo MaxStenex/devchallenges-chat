@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Request } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Request } from "@nestjs/common";
 import { CreateMessageDto } from "./dto/create-message.dto";
 import { MessageService } from "./message.service";
 
@@ -12,5 +12,10 @@ export class MessageController {
     @Request() req,
   ) {
     return this.messageService.create({ ...dto, senderId: req.user.id });
+  }
+
+  @Get("/:channelId")
+  async getChannelMessages(@Param("channelId") id) {
+    return this.messageService.getByChannelId(parseInt(id));
   }
 }
