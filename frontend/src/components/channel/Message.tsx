@@ -34,7 +34,7 @@ export const Message: React.FC<Props> = ({ sendDate, text, sender }) => {
       <div className="">
         <div className="text-gray-500 flex mb-1 items-center">
           <span className="font-bold mr-4 text-lg">{sender.username}</span>
-          <span className="text-sm">{sendDate.toString()}</span>
+          <span className="text-sm">{sendDate?.toString() || ""}</span>
         </div>
         <div className={textClassName}>{text}</div>
       </div>

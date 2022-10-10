@@ -3,33 +3,11 @@ import { useSocket } from "state/socket";
 import { Message as MessageType } from "types/message";
 import { Message } from "./";
 
-const dummyMessages: MessageType[] = [
-  {
-    id: 1,
-    sendDate: new Date(),
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum, error.",
-    sender: {
-      id: 1,
-      username: "maxStenex",
-    },
-  },
-  {
-    id: 2,
-    sendDate: new Date(),
-    text: "It is an system message",
-  },
-  {
-    id: 3,
-    sendDate: new Date(),
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum, error.",
-    sender: {
-      id: 1,
-      username: "maxStenex",
-    },
-  },
-];
+type Props = {
+  messages: MessageType[];
+};
 
-export const MessagesList = () => {
+export const MessagesList: React.FC<Props> = ({ messages }) => {
   const { socket } = useSocket();
 
   useEffect(() => {
@@ -40,7 +18,7 @@ export const MessagesList = () => {
 
   return (
     <div className="w-full">
-      {dummyMessages.map((m) => (
+      {messages.map((m) => (
         <Message key={m.id} {...m} />
       ))}
     </div>
