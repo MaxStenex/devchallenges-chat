@@ -7,6 +7,8 @@ import { useUser } from "state/user";
 
 const dropdownItemClassname = "text-medium text-sm flex";
 
+const MAXIMUM_USERNAME_SYMBOLS = 15;
+
 export const UserInfoPanel = () => {
   const dropdownTogglerRef = useRef<HTMLButtonElement>(null);
   const [dropdownIsOpened, setDropdownIsOpened] = useState(false);
@@ -48,7 +50,11 @@ export const UserInfoPanel = () => {
               objectFit="cover"
             />
           </div>
-          <span className="font-bold text-lg text-gray-500">{user.username}</span>
+          <span className="font-bold text-lg text-gray-500">
+            {user.username.length > MAXIMUM_USERNAME_SYMBOLS
+              ? user.username.slice(0, MAXIMUM_USERNAME_SYMBOLS) + "..."
+              : user.username}
+          </span>
         </div>
         <div className="relative">
           {dropdownIsOpened && (

@@ -85,11 +85,13 @@ export const RegisterForm = () => {
           error={errors.password?.message}
           {...register("password")}
           label="Password"
+          type="password"
         />
         <TextField
           error={errors.confirmPassword?.message}
           {...register("confirmPassword")}
           label="Confirm password"
+          type="password"
         />
       </div>
       <button className="btn-primary mt-8 block w-full">Confirm</button>
