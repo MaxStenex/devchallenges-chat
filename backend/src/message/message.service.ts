@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { Message } from "@prisma/client";
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateMessageDto } from "./dto/create-message.dto";
 
@@ -14,6 +13,9 @@ export class MessageService {
           text,
           channelId,
           senderId,
+        },
+        include: {
+          sender: true,
         },
       });
 

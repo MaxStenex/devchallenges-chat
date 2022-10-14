@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { Channel, ChannelInvitationLink } from "@prisma/client";
 import { randomBytes } from "crypto";
+import { ChannelGateway } from "src/channel/channel.gateway";
 import { MessageGateway } from "src/message/message.gateway";
 import { MessageService } from "src/message/message.service";
 import { PrismaService } from "src/prisma/prisma.service";
@@ -16,6 +17,7 @@ export class ChannelInvitationService {
     private readonly messageService: MessageService,
     private readonly messageGateway: MessageGateway,
     private readonly userService: UserService,
+    private readonly channelGateway: ChannelGateway,
   ) {}
 
   async getLink(channelId: number): Promise<string> {
@@ -101,7 +103,7 @@ export class ChannelInvitationService {
 
       if (!user) throw new Error();
 
-      await this.prisma.usersOnChannels.create({
+      const channelUserInfo = await this.prisma.usersOnChannels.create({
         data: {
           userId,
           channelId,
@@ -120,6 +122,12 @@ export class ChannelInvitationService {
         .to(`channel:${channelId}`)
         .emit("new-message", {
           data: notifyMessage,
+        });
+
+      this.channelGateway.server
+        .to(`channel:${channelId}`)
+        .emit("new-channel-user", {
+          data: { ...user, role: channelUserInfo.role },
         });
 
       return {

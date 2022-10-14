@@ -8,6 +8,7 @@ import { ChannelService } from "./channel.service";
 @Module({
   imports: [PrismaModule, UserModule, ChannelGateway],
   controllers: [ChannelController],
-  providers: [ChannelService],
+  providers: [ChannelService, ChannelGateway],
+  exports: [ChannelGateway],
 })
 export class ChannelModule {}
