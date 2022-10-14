@@ -6,6 +6,7 @@ import { Channel } from "types/channel";
 import { getChannelInvitation } from "api/channel-invitation";
 import { useUser } from "state/user";
 import { useToasts } from "react-toast-notifications";
+import { useSocket } from "state/socket";
 
 type Props = {
   onGoHomeClick: () => void;
@@ -13,13 +14,16 @@ type Props = {
 
 type ChannelRole = "ADMIN" | "USER";
 
+type ChannelMember = { id: number; username: string; role: ChannelRole };
+
 type ChannelInfo = Channel & {
-  members: { id: number; username: string; role: ChannelRole }[];
+  members: ChannelMember[];
 };
 
 export const ChannelInfoContent: React.FC<Props> = ({ onGoHomeClick }) => {
   const { user } = useUser();
   const { addToast } = useToasts();
+  const { socket } = useSocket();
 
   const [channelInfo, setChannelInfo] = useState<ChannelInfo | null>(null);
   const channelAdmin = channelInfo?.members.find((m) => m.role === "ADMIN");
@@ -46,8 +50,22 @@ export const ChannelInfoContent: React.FC<Props> = ({ onGoHomeClick }) => {
           })),
         })
       );
+
+      socket.on("new-channel-user", ({ data }) => {
+        const newUser: ChannelMember = data;
+
+        setChannelInfo((prev) => {
+          if (!prev) return prev;
+
+          return { ...prev, members: [...prev.members, newUser] };
+        });
+      });
     }
-  }, [channelId]);
+
+    return () => {
+      socket.removeAllListeners("new-channel-user");
+    };
+  }, [channelId, socket]);
 
   useEffect(() => {
     if (channelId && userIsAdmin) {
