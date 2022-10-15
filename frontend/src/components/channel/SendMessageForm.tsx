@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export const SendMessageForm = () => {
   return (
-    <form>
+    <form className="px-11 mb-5">
       <div className="input-primary flex justify-between items-center pl-0 py-2">
         <input
           type="text"

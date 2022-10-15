@@ -27,7 +27,7 @@ const ChannelPage: React.FC<Props> = ({ messages }) => {
   }, [channelId, socket]);
 
   return (
-    <div className="px-11 py-9 pb-7 h-full">
+    <div className="h-full">
       <div className="h-full flex flex-col justify-between">
         <MessagesList messages={messages} />
         <SendMessageForm />

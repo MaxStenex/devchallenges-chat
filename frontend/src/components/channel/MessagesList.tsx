@@ -24,7 +24,7 @@ export const MessagesList: React.FC<Props> = ({ messages: initialMessages }) => 
   }, [socket]);
 
   return (
-    <div className="w-full">
+    <div className="w-full overflow-auto scrollbar-thin px-11 py-9 pb-7 space-y-4">
       {messages.map((m) => (
         <Message key={m.id} {...m} />
       ))}

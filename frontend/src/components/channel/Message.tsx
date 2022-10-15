@@ -20,7 +20,7 @@ export const Message: React.FC<Props> = ({ sendDate, text, sender }) => {
   }
 
   return (
-    <div className="w-full flex items-start mb-4">
+    <div className="w-full flex items-start">
       <div className="mr-6 mt-2">
         <Image
           width={42}

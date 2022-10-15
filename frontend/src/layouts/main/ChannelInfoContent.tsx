@@ -88,7 +88,7 @@ export const ChannelInfoContent: React.FC<Props> = ({ onGoHomeClick }) => {
   };
 
   return (
-    <div className="">
+    <div className="flex-1">
       <div className="flex justify-between items-center py-3 mb-6">
         <button
           onClick={onGoHomeClick}
@@ -114,7 +114,7 @@ export const ChannelInfoContent: React.FC<Props> = ({ onGoHomeClick }) => {
               </button>
             )}
           </div>
-          <div className="">
+          <div className="mb-6">
             <h4 className="font-bold text-lg uppercase mb-6">Members</h4>
             <div className="space-y-3">
               {channelInfo.members.map((m) => (
