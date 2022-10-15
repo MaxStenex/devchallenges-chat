@@ -26,12 +26,14 @@ model Channel {
 }
 
 model Message {
-  id        Int     @id @default(autoincrement())
-  text      String  @db.VarChar()
-  sender    User?   @relation(fields: [senderId], references: [id])
+  id        Int      @id @default(autoincrement())
+  text      String   @db.VarChar()
+  sender    User?    @relation(fields: [senderId], references: [id])
   senderId  Int?
-  channel   Channel @relation(fields: [channelId], references: [id])
+  channel   Channel  @relation(fields: [channelId], references: [id])
   channelId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ChannelInvitationLink {

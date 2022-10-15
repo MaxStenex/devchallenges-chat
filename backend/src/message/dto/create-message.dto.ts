@@ -1,3 +1,3 @@
 import { Message } from "@prisma/client";
 
-export type CreateMessageDto = Omit<Message, "id">;
+export type CreateMessageDto = Omit<Message, "id" | "createdAt" | "updatedAt">;
