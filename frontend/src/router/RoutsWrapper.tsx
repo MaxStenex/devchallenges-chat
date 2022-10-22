@@ -11,6 +11,7 @@ export function RoutsWrapper({ children }: any) {
   } = useUser();
 
   const userOnAuthPage = router.pathname === "/login" || router.pathname === "/register";
+  const onAuthPageFrom = router.query.from && String(router.query.from);
 
   useEffect(() => {
     if (!isLoading && !loggedIn && !userOnAuthPage) {
@@ -18,9 +19,13 @@ export function RoutsWrapper({ children }: any) {
     }
 
     if (!isLoading && loggedIn && userOnAuthPage) {
-      router.push("/");
+      if (onAuthPageFrom) {
+        router.push(onAuthPageFrom);
+      } else {
+        router.push("/");
+      }
     }
-  }, [isLoading, loggedIn, router, userOnAuthPage]);
+  }, [isLoading, loggedIn, onAuthPageFrom, router, userOnAuthPage]);
 
   if ((isLoading || !loggedIn) && !userOnAuthPage) {
     return <FullPageLoader />;

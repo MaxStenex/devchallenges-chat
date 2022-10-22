@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { login } from "api/auth";
 import { TextField } from "components/ui";
-import { useRouter } from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useUser } from "state/user";
 import { prepareUserData } from "utils/prepareUserData";
@@ -33,8 +32,6 @@ export const LoginForm = () => {
 
   const { loginUser } = useUser();
 
-  const router = useRouter();
-
   const onSubmit: SubmitHandler<LoginFormInputs> = async ({ email, password }) => {
     try {
       const { data } = await login({ email, password });
@@ -42,7 +39,6 @@ export const LoginForm = () => {
       if (!data) return;
 
       loginUser(prepareUserData(data));
-      router.push("/");
     } catch (error) {
       if ((error as any)?.response?.status === 401) {
         const message = "Invalid email or password";

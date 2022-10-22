@@ -80,10 +80,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       } as Props,
     };
   } catch (error) {
+    const redirectFrom = `?from=${context.req.url}`;
+
     return {
       redirect: {
         permanent: false,
-        destination: "/login",
+        destination: "/login" + redirectFrom,
       },
     };
   }
