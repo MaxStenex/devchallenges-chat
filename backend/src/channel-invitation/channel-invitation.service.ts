@@ -115,6 +115,7 @@ export class ChannelInvitationService {
           text: `Welcome! User ${user.username} joined this channel`,
           channelId,
           senderId: null,
+          socketServer: this.messageGateway.server,
         })
         .catch();
 

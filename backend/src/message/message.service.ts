@@ -1,12 +1,18 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateMessageDto } from "./dto/create-message.dto";
+import { Server } from "socket.io";
 
 @Injectable()
 export class MessageService {
   constructor(private prismaService: PrismaService) {}
 
-  async create({ channelId, senderId, text }: CreateMessageDto) {
+  async create({
+    channelId,
+    senderId,
+    text,
+    socketServer,
+  }: CreateMessageDto & { socketServer: Server }) {
     try {
       const message = await this.prismaService.message.create({
         data: {
@@ -17,6 +23,10 @@ export class MessageService {
         include: {
           sender: true,
         },
+      });
+
+      socketServer.to(`channel:${channelId}`).emit("new-message", {
+        data: message,
       });
 
       return message;
