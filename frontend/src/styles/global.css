@@ -34,4 +34,8 @@ input:focus {
   .scrollbar-thin::-webkit-scrollbar-thumb {
     background: #555;
   }
+
+  .absolute-centered {
+    @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2;
+  }
 }

@@ -1,12 +1,13 @@
 import React from "react";
 import Image from "next/image";
 import type { Message as MessageType } from "types/message";
+import dayjs from "dayjs";
 
 type Props = MessageType;
 
 const textClassName = "text-gray-100 font-medium text-lg";
 
-export const Message: React.FC<Props> = ({ sendDate, text, sender }) => {
+export const Message: React.FC<Props> = ({ text, sender, createdAt }) => {
   if (!sender) {
     return (
       <div className="w-full mb-4">
@@ -34,7 +35,7 @@ export const Message: React.FC<Props> = ({ sendDate, text, sender }) => {
       <div className="">
         <div className="text-gray-500 flex mb-1 items-center">
           <span className="font-bold mr-4 text-lg">{sender.username}</span>
-          <span className="text-sm">{sendDate?.toString() || ""}</span>
+          <span className="text-sm">{dayjs(createdAt).format("LT")}</span>
         </div>
         <div className={textClassName}>{text}</div>
       </div>

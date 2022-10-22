@@ -9,6 +9,9 @@ import { ToastProvider } from "state/toasts";
 import { RoutsWrapper } from "router";
 import Head from "next/head";
 import { SocketProvider } from "state/socket";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+import dayjs from "dayjs";
+dayjs.extend(localizedFormat);
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
