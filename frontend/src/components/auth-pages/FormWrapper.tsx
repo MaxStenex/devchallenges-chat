@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 type Props = {
   children: React.ReactNode;
@@ -9,6 +10,8 @@ type Props = {
 };
 
 export const FormWrapper: React.FC<Props> = ({ children, linkText, linkHref, title }) => {
+  const router = useRouter();
+
   return (
     <div className="bg-zinc-800 w-screen h-screen">
       <div className="w-full h-full min-h-full flex justify-center items-center">
@@ -16,7 +19,7 @@ export const FormWrapper: React.FC<Props> = ({ children, linkText, linkHref, tit
           <h2 className="font-bold text-3xl text-center mb-7">{title}</h2>
           {children}
           {linkText && linkHref && (
-            <Link href={linkHref} passHref>
+            <Link href={{ pathname: linkHref, query: { ...router.query } }} passHref>
               <a className="mt-4 block text-blue-500 hover:underline">{linkText}</a>
             </Link>
           )}

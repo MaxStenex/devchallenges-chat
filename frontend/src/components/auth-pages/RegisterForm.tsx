@@ -60,7 +60,10 @@ export const RegisterForm = () => {
       addToast("Registered successfully", {
         appearance: "success",
       });
-      router.push("/login");
+      router.push({
+        query: { ...router.query },
+        pathname: "/login",
+      });
     } catch (error) {
       const errorMessage = (error as any)?.response?.data?.message || "";
 
